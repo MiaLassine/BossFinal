@@ -36,11 +36,29 @@ namespace Boss_final;
  */
 class Program
 {
-    static void remainingDisplays(int counter)
+    static void RoundDisplay()
     {
         Console.WriteLine("----------------------------------------------------------------------");
-        Console.WriteLine("Tour :" + counter);
+        Console.WriteLine("Tour : ");
+    }
 
+    static void PlayerHealthDisplay()
+    {
+        Console.WriteLine("Player HP : ");
+    }
+
+    static void BossHealthDisplay()
+    {
+        Console.WriteLine("Boss HP : ");
+    }
+
+    static void PlayerRound()
+    {
+        Console.WriteLine("----------------------------------------------------------------------");
+        Console.WriteLine("Que décidez vous de faire (1 - 3) ?");
+        Console.WriteLine("1. Attaquer");
+        Console.WriteLine("2. Vous soigner");
+        Console.WriteLine("3. Tentez de fuir");
     }
 
     static int CalculatePlayerDamage(int weaponPower, int playerPower)
@@ -83,41 +101,71 @@ class Program
         Random randomNumber = new Random(); //Création d'une variable instanciée pour générer un nombre aléatoire
 
         int playerDamage = CalculatePlayerDamage(100, 10); //Entre 10 et 20 (2)
-        int playerHealth = MaxPlayerHealth(100, 100);
-        int playerDefense = PlayerDefense(4, 7, 6, 3) / 100 + 1; //Defense en %
+        int playerHealth = MaxPlayerHealth(50, 50); //HP, Shield
+        int playerDefense = PlayerDefense(4, 7, 6, 3) / 100 + 1; //Helmet + Chestplate + Leggings + Boots = Defense en %
         int healPlayer = UsePotion(50); //Heal par potion
         int bossDamage = CalculateMonsterDamage(5, 2); //Entre 2 et 4 (2)
-        int bossHealth = MaxMonsterHealth(10000, 0);
+        int bossHealth = MaxMonsterHealth(10000, 0); //HP, Shield
+
+        int counter = 0; //Compteur de boucle
+
+        float isRunAway = 1; //Random Number
+        int runAwayChance = 10; //In %
 
         Console.WriteLine("----------------------------------------------------------------------");
         Console.WriteLine("Vous êtes face à un Boss !");
-        Console.WriteLine("Que décidez vous de faire (1 - 3) ?");
-        Console.WriteLine("1. Attaquer");
-        Console.WriteLine("2. Vous soigner");
-        Console.WriteLine("3. Tentez de fuir");
-        Console.WriteLine("----------------------------------------------------------------------");
-        string? stringPlayerAnswer = Console.ReadLine();
-        int intPlayerAnswer = Convert.ToInt32(stringPlayerAnswer);
-        Console.WriteLine("----------------------------------------------------------------------");
+
         do
         {
-            if(intPlayerAnswer == '1')
+            counter += 1;
+
+            RoundDisplay(); Console.WriteLine(counter);
+            PlayerHealthDisplay(); Console.WriteLine(playerHealth);
+            BossHealthDisplay(); Console.WriteLine(bossHealth);
+            PlayerRound();
+
+            Console.WriteLine("----------------------------------------------------------------------");
+            string? playerAnswer = Console.ReadLine();
+            
+            if(playerAnswer == "1") //Attaquer
             {
+                Console.WriteLine("----------------------------------------------------------------------");
+                Console.WriteLine("Vous décidez d'attaquer !");
 
             }
-            else if(intPlayerAnswer == '2')
-            {
 
+            else if(playerAnswer == "2") //Se soigner
+            {
+                Console.WriteLine("----------------------------------------------------------------------");
+                Console.WriteLine("Vous décidez de vous soigner !");
             }
-            else if(intPlayerAnswer == '3')
-            {
 
+            else if(playerAnswer == "3") //S'enfuir
+            {
+                Console.WriteLine("----------------------------------------------------------------------");
+                Console.WriteLine("Vous décidez d'essayer de vous enfuir !");
+                isRunAway = randomNumber.Next(1, 100/runAwayChance);
+                if(isRunAway%runAwayChance == 0)
+                {
+                    break;
+                }
+
+                else
+                {
+                    Console.WriteLine("Tu n'as pas réussi à t'échapper !");
+                }
             }
             else
             {
-                Console.WriteLine("Erreur d'encodage, veuillez réessayez");
+                Console.WriteLine("Erreur lors de l'encodage, veuillez réessayer");
             }
+            Console.WriteLine("----------------------------------------------------------------------\n\n\n");
+
         }
         while(bossHealth > 0 && playerHealth > 0);
+        if(isRunAway == 0)
+        {
+            Console.WriteLine("Tu as réussi à t'enfuir de justesse !");
+        }
     }
 }
