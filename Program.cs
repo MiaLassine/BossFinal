@@ -36,8 +36,88 @@ namespace Boss_final;
  */
 class Program
 {
+    static void remainingDisplays(int counter)
+    {
+        Console.WriteLine("----------------------------------------------------------------------");
+        Console.WriteLine("Tour :" + counter);
+
+    }
+
+    static int CalculatePlayerDamage(int weaponPower, int playerPower)
+    {
+        int totalDamage = weaponPower * playerPower;
+        return totalDamage;
+    }
+
+    static int CalculateMonsterDamage(int weaponPower, int playerPower)
+    {
+        int totalDamage = weaponPower * playerPower;
+        return totalDamage;
+    }
+
+    static int MaxPlayerHealth(int playerHealth, int playerHealthShielded)
+    {
+        int  totalPlayerHealth = playerHealth + playerHealthShielded;
+        return  totalPlayerHealth;
+    }
+
+    static int MaxMonsterHealth(int bossHealth, int bossHealthShielded)
+    {
+        int totalBossHealth = bossHealth + bossHealthShielded;
+        return totalBossHealth;
+    }
+
+    static int PlayerDefense(int playerHelmet, int playerChesplate, int playerLeggings, int playerBoots)
+    {
+        int totalDefense = playerHelmet + playerChesplate + playerLeggings + playerBoots;
+        return totalDefense;
+    }
+
+    static int UsePotion(int healingReceived)
+    {
+        return healingReceived;
+    }
+
     static void Main(string[] args)
     {
-        
+        Random randomNumber = new Random(); //Création d'une variable instanciée pour générer un nombre aléatoire
+
+        int playerDamage = CalculatePlayerDamage(100, 10); //Entre 10 et 20 (2)
+        int playerHealth = MaxPlayerHealth(100, 100);
+        int playerDefense = PlayerDefense(4, 7, 6, 3) / 100 + 1; //Defense en %
+        int healPlayer = UsePotion(50); //Heal par potion
+        int bossDamage = CalculateMonsterDamage(5, 2); //Entre 2 et 4 (2)
+        int bossHealth = MaxMonsterHealth(10000, 0);
+
+        Console.WriteLine("----------------------------------------------------------------------");
+        Console.WriteLine("Vous êtes face à un Boss !");
+        Console.WriteLine("Que décidez vous de faire (1 - 3) ?");
+        Console.WriteLine("1. Attaquer");
+        Console.WriteLine("2. Vous soigner");
+        Console.WriteLine("3. Tentez de fuir");
+        Console.WriteLine("----------------------------------------------------------------------");
+        string? stringPlayerAnswer = Console.ReadLine();
+        int intPlayerAnswer = Convert.ToInt32(stringPlayerAnswer);
+        Console.WriteLine("----------------------------------------------------------------------");
+        do
+        {
+            if(intPlayerAnswer == '1')
+            {
+
+            }
+            else if(intPlayerAnswer == '2')
+            {
+
+            }
+            else if(intPlayerAnswer == '3')
+            {
+
+            }
+            else
+            {
+                Console.WriteLine("Erreur d'encodage, veuillez réessayez");
+            }
+        }
+        while(bossHealth > 0 && playerHealth > 0);
     }
 }
