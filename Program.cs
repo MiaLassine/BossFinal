@@ -1,4 +1,8 @@
-﻿namespace Boss_final;
+﻿//Programme : Boss Final
+//Creator : Mia Lassine 107B
+//Date : 19/11/2026
+
+namespace Boss_final;
 
 /*
     CONSIGNES
