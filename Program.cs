@@ -2,6 +2,8 @@
 //Creator : Mia Lassine 107B
 //Date : 19/11/2026
 
+using System.Data.SqlTypes;
+
 namespace Boss_final;
 
 /*
@@ -34,6 +36,7 @@ namespace Boss_final;
     BONUS :
         - Inspirez-vous de votre combat du cours de Logique & Algorithmes pour aller plus loin dans cet exercice
  */
+
 class Program
 {
     static void RoundDisplay()
@@ -61,37 +64,37 @@ class Program
         Console.WriteLine("3. Tentez de fuir");
     }
 
-    static int CalculatePlayerDamage(int weaponPower, int playerPower)
+    static float CalculatePlayerDamage(float weaponPower, float playerPower)
     {
-        int totalDamage = weaponPower * playerPower;
+        float totalDamage = weaponPower + playerPower;
         return totalDamage;
     }
 
-    static int CalculateMonsterDamage(int weaponPower, int playerPower)
+    static float CalculateMonsterDamage(float weaponPower, float playerPower)
     {
-        int totalDamage = weaponPower * playerPower;
+        float totalDamage = weaponPower * playerPower;
         return totalDamage;
     }
 
-    static int MaxPlayerHealth(int playerHealth, int playerHealthShielded)
+    static float MaxPlayerHealth(float playerHealth, float playerHealthShielded)
     {
-        int  totalPlayerHealth = playerHealth + playerHealthShielded;
+        float  totalPlayerHealth = playerHealth + playerHealthShielded;
         return  totalPlayerHealth;
     }
 
-    static int MaxMonsterHealth(int bossHealth, int bossHealthShielded)
+    static float MaxMonsterHealth(float bossHealth, float bossHealthShielded)
     {
-        int totalBossHealth = bossHealth + bossHealthShielded;
+        float totalBossHealth = bossHealth + bossHealthShielded;
         return totalBossHealth;
     }
 
-    static int PlayerDefense(int playerHelmet, int playerChesplate, int playerLeggings, int playerBoots)
+    static float PlayerDefense(float playerHelmet, float playerChesplate, float playerLeggings, float playerBoots)
     {
-        int totalDefense = playerHelmet + playerChesplate + playerLeggings + playerBoots;
+        float totalDefense = playerHelmet + playerChesplate + playerLeggings + playerBoots;
         return totalDefense;
     }
 
-    static int UsePotion(int healingReceived)
+    static float UsePotion(float healingReceived)
     {
         return healingReceived;
     }
@@ -100,14 +103,42 @@ class Program
     {
         Random randomNumber = new Random(); //Création d'une variable instanciée pour générer un nombre aléatoire
 
-        int playerDamage = CalculatePlayerDamage(100, 10); //Entre 10 et 20 (2)
-        int playerHealth = MaxPlayerHealth(50, 50); //HP, Shield
-        int playerDefense = PlayerDefense(4, 7, 6, 3) / 100 + 1; //Helmet + Chestplate + Leggings + Boots = Defense en %
-        int healPlayer = UsePotion(50); //Heal par potion
-        int bossDamage = CalculateMonsterDamage(5, 2); //Entre 2 et 4 (2)
-        int bossHealth = MaxMonsterHealth(10000, 0); //HP, Shield
+        float playerDamage = CalculatePlayerDamage(750, 250); //Entre 10 et 20 (2)
+        float playerHealth = MaxPlayerHealth(50, 50); //HP, Shield
+        float playerDefense = PlayerDefense(4, 7, 6, 3) / 100 + 1; //Helmet + Chestplate + Leggings + Boots = Defense en %
+        float playerHeal = UsePotion(50); //Heal par potion
+        float bossDamage = CalculateMonsterDamage(5, 2); //Entre 2 et 4 (2)
+        float bossHealth = MaxMonsterHealth(10000, 0); //HP, Shield
+
+        int playerPotionStock = 0;
+        float playerMoney = 300;
+        string playerAnswer;
+
+        do
+        {
+            Console.WriteLine("----------------------------------------------------------------------");
+            Console.WriteLine("Vous possédez " + playerMoney + " pièce d'or et " + playerPotionStock + " potions.");
+            Console.WriteLine("C'est 100 pièces d'or par potion.");
+            Console.WriteLine("Voulez-vous acheter une potion de soin (\"Oui/...\") ?");
+            Console.WriteLine("----------------------------------------------------------------------");
+            playerAnswer = Console.ReadLine();
+            if(playerMoney >= 100)
+            {
+                playerMoney -= 100;
+                playerPotionStock += 1;
+            }
+            else if(playerMoney < 100)
+            {
+                Console.WriteLine("----------------------------------------------------------------------");
+                Console.WriteLine("Vous n'avez plus assez d'or !");
+                Console.WriteLine("Vous ne pouvez plus achetez de potion!");
+                break;
+            }
+        }
+        while(playerAnswer == "Oui");
 
         int counter = 0; //Compteur de boucle
+        float displayDamageBonus;
 
         float isRunAway = 1; //Random Number
         int runAwayChance = 10; //In %
@@ -125,19 +156,37 @@ class Program
             PlayerRound();
 
             Console.WriteLine("----------------------------------------------------------------------");
-            string? playerAnswer = Console.ReadLine();
+            playerAnswer = Console.ReadLine();
             
             if(playerAnswer == "1") //Attaquer
             {
                 Console.WriteLine("----------------------------------------------------------------------");
-                Console.WriteLine("Vous décidez d'attaquer !");
+                displayDamageBonus = playerDamage * (randomNumber.Next(1, 10) / 10 + 1); //Multiplie l'attaque de manière aléatoire entre 1 et 2
+                bossHealth -= displayDamageBonus;
+                Console.WriteLine("Vous infligez " + displayDamageBonus + " dégâts !");
 
+                displayDamageBonus = bossDamage * (randomNumber.Next(1, 10) / 10 + 1);//Multiplie l'attaque de manière aléatoire entre 1 et 2
+                playerHealth -= displayDamageBonus;
+                Console.WriteLine("Vous subissez " + displayDamageBonus + " dégâts !");
             }
 
             else if(playerAnswer == "2") //Se soigner
             {
-                Console.WriteLine("----------------------------------------------------------------------");
-                Console.WriteLine("Vous décidez de vous soigner !");
+                if(playerPotionStock == 0)
+                {
+                    Console.WriteLine("Vous n'avez plus de potion !");
+                    displayDamageBonus = bossDamage * (randomNumber.Next(1, 10) / 10 + 1);//Multiplie l'attaque de manière aléatoire entre 1 et 2
+                    playerHealth -= displayDamageBonus;
+                    Console.WriteLine("Vous subissez " + displayDamageBonus + " dégâts !");
+                }
+
+                else
+                {
+                    Console.WriteLine("----------------------------------------------------------------------");
+                    Console.WriteLine("Vous décidez de vous soigner à l'abri des regards !");
+                    playerHealth += playerHeal;
+                    playerPotionStock -= 1;
+                }
             }
 
             else if(playerAnswer == "3") //S'enfuir
@@ -162,10 +211,24 @@ class Program
             Console.WriteLine("----------------------------------------------------------------------\n\n\n");
 
         }
-        while(bossHealth > 0 && playerHealth > 0);
+        while(bossHealth >= 0 && playerHealth >= 0);
         if(isRunAway == 0)
         {
             Console.WriteLine("Tu as réussi à t'enfuir de justesse !");
+        }
+        if(bossHealth >= 0)
+        {
+            playerMoney += 1000;
+            Console.WriteLine("Vous avez triomphé du mal !");
+            Console.WriteLine("Vous Obtenez 1000 pièce d'or !");
+            Console.WriteLine("Vous possédez désormais " + playerMoney + " pièce d'or.");
+            Console.WriteLine("Vous obtenez " + randomNumber.Next(1, 3) + " fragment(s) d'âme de Boss");
+        }
+        if(playerHealth >= 0)
+        {
+            Console.WriteLine("Vous êtes mort.");
+            Console.WriteLine("Vous perdez 100 pièces d'or !");
+            Console.WriteLine("Vous possédez désormais " + playerMoney + " pièce d'or.");
         }
     }
 }
