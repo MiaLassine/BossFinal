@@ -104,7 +104,7 @@ class Program
         Random randomNumber = new Random(); //Création d'une variable instanciée pour générer un nombre aléatoire
 
         float playerDamage = CalculatePlayerDamage(750, 250); //Entre 10 et 20 (2)
-        float playerHealth = MaxPlayerHealth(50, 50); //HP, Shield
+        float playerHealth = MaxPlayerHealth(50, 50); //HP + Shield
         float playerDefense = PlayerDefense(4, 7, 6, 3) / 100 + 1; //Helmet + Chestplate + Leggings + Boots = Defense en %
         float playerHeal = UsePotion(50); //Heal par potion
         float bossDamage = CalculateMonsterDamage(5, 2); //Entre 2 et 4 (2)
@@ -148,6 +148,10 @@ class Program
 
         do
         {
+            if(bossHealth <= 0 || playerHealth <= 0)
+            {
+                break;
+            }
             counter += 1;
 
             RoundDisplay(); Console.WriteLine(counter);
@@ -161,11 +165,11 @@ class Program
             if(playerAnswer == "1") //Attaquer
             {
                 Console.WriteLine("----------------------------------------------------------------------");
-                displayDamageBonus = playerDamage * (randomNumber.Next(1, 10) / 10 + 1); //Multiplie l'attaque de manière aléatoire entre 1 et 2
+                displayDamageBonus = playerDamage * (randomNumber.Next(0, 10) / 10 + 1); //Multiplie l'attaque de manière aléatoire entre 1 et 2
                 bossHealth -= displayDamageBonus;
                 Console.WriteLine("Vous infligez " + displayDamageBonus + " dégâts !");
 
-                displayDamageBonus = bossDamage * (randomNumber.Next(1, 10) / 10 + 1);//Multiplie l'attaque de manière aléatoire entre 1 et 2
+                displayDamageBonus = bossDamage * (randomNumber.Next(0, 10) / 10 + 1);//Multiplie l'attaque de manière aléatoire entre 1 et 2
                 playerHealth -= displayDamageBonus;
                 Console.WriteLine("Vous subissez " + displayDamageBonus + " dégâts !");
             }
@@ -211,7 +215,7 @@ class Program
             Console.WriteLine("----------------------------------------------------------------------\n\n\n");
 
         }
-        while(bossHealth >= 0 && playerHealth >= 0);
+        while(bossHealth >= 0 || playerHealth >= 0);
         if(isRunAway == 0)
         {
             Console.WriteLine("Tu as réussi à t'enfuir de justesse !");
