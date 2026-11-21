@@ -2,8 +2,6 @@
 //Creator : Mia Lassine 107B
 //Date : 19/11/2026
 
-using System.Data.SqlTypes;
-
 namespace Boss_final;
 
 /*
@@ -131,17 +129,22 @@ class Program
             Console.WriteLine("Voulez-vous acheter une potion de soin (\"Oui/...\") ?");
             Console.WriteLine("----------------------------------------------------------------------");
             playerAnswer = Console.ReadLine();
-            if(playerMoney >= 100)
-            {
-                playerMoney -= 100;
-                playerPotionStock += 1;
-            }
-            else if(playerMoney < 100)
-            {
-                Console.WriteLine("----------------------------------------------------------------------");
-                Console.WriteLine("Vous n'avez plus assez d'or !");
-                Console.WriteLine("Vous ne pouvez plus achetez de potion!");
-                break;
+
+            if(playerAnswer == "Oui"){
+                if (playerMoney >= 100)
+                {
+                    Console.WriteLine("----------------------------------------------------------------------");
+                    Console.WriteLine("Vous avez acheté une potion !");
+                    playerMoney -= 100;
+                    playerPotionStock += 1;
+                }
+                else if (playerMoney < 100)
+                {
+                    Console.WriteLine("----------------------------------------------------------------------");
+                    Console.WriteLine("Vous n'avez plus assez d'or !");
+                    Console.WriteLine("Vous ne pouvez plus achetez de potion!");
+                    break;
+                }
             }
         }
         while(playerAnswer == "Oui");
@@ -157,10 +160,10 @@ class Program
 
         do
         {
-            if(bossHealth <= 0 || playerHealth <= 0)
+            /*if(bossHealth <= 0 || playerHealth <= 0)
             {
                 break;
-            }
+            }*/
             counter += 1;
 
             RoundDisplay(); Console.WriteLine(counter);
@@ -178,7 +181,7 @@ class Program
                 bossHealth -= displayDamageBonus;
                 Console.WriteLine("Vous infligez " + displayDamageBonus + " dégâts !");
 
-                displayDamageBonus = bossDamage * (randomNumber.Next(0, 10) / 10f + 1f); //Multiplie l'attaque de manière aléatoire entre 1 et 2
+                displayDamageBonus = (bossDamage * (randomNumber.Next(0, 10) / 10f + 1f)) / playerDefense; //Multiplie l'attaque de manière aléatoire entre 1 et 2
                 playerHealth -= displayDamageBonus;
                 Console.WriteLine("Vous subissez " + displayDamageBonus + " dégâts !");
             }
@@ -228,7 +231,7 @@ class Program
         }
         while(bossHealth >= 0 || playerHealth >= 0);
         
-        if(bossHealth >= 0)
+        if(bossHealth <= 0)
         {
             playerMoney += 1000;
             Console.WriteLine("Vous avez triomphé du mal !");
