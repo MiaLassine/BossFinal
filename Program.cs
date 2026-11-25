@@ -161,7 +161,7 @@ class Program
         float displayDamageBonus;
 
         float isRunAway = 1; //Random Number
-        float runAwayChance = 20; //In %
+        int runAwayChance = 20; //In %
 
         Console.WriteLine("----------------------------------------------------------------------");
         Console.WriteLine("Vous êtes face à un Boss !");
@@ -218,7 +218,7 @@ class Program
             {
                 Console.WriteLine("----------------------------------------------------------------------");
                 Console.WriteLine("Vous décidez d'essayer de vous enfuir !");
-                isRunAway = randomNumber.Next(1, 100) / runAwayChance;
+                isRunAway = randomNumber.Next(1, 100 / runAwayChance);
                 if (isRunAway % runAwayChance == 0)
                 {
                     Console.WriteLine("----------------------------------------------------------------------");
@@ -247,7 +247,15 @@ class Program
         BossHealthDisplay(); Console.WriteLine(bossHealth);
         Console.WriteLine("----------------------------------------------------------------------");
 
-        if (bossHealth <= 0)
+        if (playerHealth <= 0)
+        {
+            playerMoney -= 100;
+            Console.WriteLine("Vous êtes mort.");
+            Console.WriteLine("Vous perdez 100 pièces d'or !\n");
+            Console.WriteLine("Vous possédez désormais " + playerMoney + " pièce d'or.");
+        }
+
+        else if (playerHealth > 0)
         {
             playerMoney += 1000;
             Console.WriteLine("Vous avez vaincu le boss !");
@@ -255,12 +263,6 @@ class Program
             Console.WriteLine("Vous possédez désormais " + playerMoney + " pièce d'or.");
             Console.WriteLine("Vous obtenez " + randomNumber.Next(1, 3) + " fragment(s) d'âme de Boss");
         }
-        if (playerHealth >= 0)
-        {
-            playerMoney -= 100;
-            Console.WriteLine("Vous êtes mort.");
-            Console.WriteLine("Vous perdez 100 pièces d'or !\n");
-            Console.WriteLine("Vous possédez désormais " + playerMoney + " pièce d'or.");
-        }
+        
     }
 }
