@@ -90,14 +90,14 @@ class Program
 
     static float PlayerDefense(float playerHelmet, float playerChesplate, float playerLeggings, float playerBoots)
     {
-        float totalDefense = playerHelmet + playerChesplate + playerLeggings + playerBoots;
-        return totalDefense;
+        float totalPlayerDefense = playerHelmet + playerChesplate + playerLeggings + playerBoots;
+        return totalPlayerDefense;
     }
 
     static float BossDefense(float bossHelmet, float bossChesplate, float bossLeggings, float bossBoots)
     {
-        float totalDefense = bossHelmet + bossChesplate + bossLeggings + bossBoots;
-        return totalDefense;
+        float totalBossDefense = bossHelmet + bossChesplate + bossLeggings + bossBoots;
+        return totalBossDefense;
     }
 
     static float UsePotion(float healingReceived)
@@ -111,7 +111,7 @@ class Program
     {
         Random randomNumber = new Random(); //Création d'une variable instanciée pour générer un nombre aléatoire
 
-        /*----------------------------- Valeurs modifiables -----------------------------*/
+        /*----------------------------------------- Variables -----------------------------------------*/
 
         float playerDamage = CalculatePlayerDamage(750, 250); //Entre 10 et 20 (2)
         float playerHealth = MaxPlayerHealth(50, 50); //HP + Shield
@@ -119,10 +119,19 @@ class Program
         float playerHeal = UsePotion(50); //Heal par potion
         float bossDamage = CalculateMonsterDamage(5, 2); //Entre 2 et 4 (2)
         float bossHealth = MaxMonsterHealth(10000, 0); //HP + Shield
-        float bossDefense = BossDefense(2, 3, 3, 2) / 100 + 1; //Helmet + Chestplate + Leggings + Boots = Defense en %
+        float bossDefense = BossDefense(3, 6, 6, 3) / 100 + 1; //Helmet + Chestplate + Leggings + Boots = Defense en %
 
         int playerPotionStock = 0;
         float playerMoney = 300;
+        int playerSoulFragment = 0;
+        int playerSoulFragmentDisplay;
+
+        int counter = 0; //Compteur de boucle
+        float displayDamageBonus;
+
+        float isRunAway = 1; //Random Number
+        int runAwayChance = 20; //In %
+
 
         /*---------------------------------------------------------------------------------------*/
 
@@ -157,12 +166,6 @@ class Program
         }
         while (playerAnswer == "Oui");
 
-        int counter = 0; //Compteur de boucle
-        float displayDamageBonus;
-
-        float isRunAway = 1; //Random Number
-        int runAwayChance = 20; //In %
-
         Console.WriteLine("----------------------------------------------------------------------");
         Console.WriteLine("Vous êtes face à un Boss !");
 
@@ -185,11 +188,11 @@ class Program
             if (playerAnswer == "1") //Attaquer
             {
                 Console.WriteLine("----------------------------------------------------------------------");
-                displayDamageBonus = playerDamage * (randomNumber.Next(0, 10) / 10f + 1f) / bossDefense; //Multiplie l'attaque de manière aléatoire entre 1 et 2
+                displayDamageBonus = playerDamage * (randomNumber.Next(0, 10) / 10f + 1f) / bossDefense; // (Attaque * entre 1 & 2) / Def %
                 bossHealth -= displayDamageBonus;
                 Console.WriteLine("Vous infligez " + displayDamageBonus + " dégâts !");
 
-                displayDamageBonus = (bossDamage * (randomNumber.Next(0, 10) / 10f + 1f)) / playerDefense; //Multiplie l'attaque de manière aléatoire entre 1 et 2
+                displayDamageBonus = (bossDamage * (randomNumber.Next(0, 10) / 10f + 1f)) / playerDefense; // (Attaque * entre 1 & 2) / Def %
                 playerHealth -= displayDamageBonus;
                 Console.WriteLine("Vous subissez " + displayDamageBonus + " dégâts !");
             }
@@ -251,18 +254,25 @@ class Program
         {
             playerMoney -= 100;
             Console.WriteLine("Vous êtes mort.");
-            Console.WriteLine("Vous perdez 100 pièces d'or !\n");
+            Console.WriteLine("Vous perdez 100 pièces d'or !");
+            Console.WriteLine("----------------------------------------------------------------------");
             Console.WriteLine("Vous possédez désormais " + playerMoney + " pièce d'or.");
         }
 
         else if (playerHealth > 0)
         {
             playerMoney += 1000;
+            playerSoulFragmentDisplay = randomNumber.Next(1, 3);
+            playerSoulFragment += playerSoulFragmentDisplay;
+
             Console.WriteLine("Vous avez vaincu le boss !");
-            Console.WriteLine("Vous Obtenez 1000 pièce d'or !\n");
+            Console.WriteLine("Vous obtenez 1000 pièce d'or !");
+            Console.WriteLine("Vous obtenez " + playerSoulFragmentDisplay + " fragment(s) d'âme de Boss !");
+            Console.WriteLine("----------------------------------------------------------------------");
             Console.WriteLine("Vous possédez désormais " + playerMoney + " pièce d'or.");
-            Console.WriteLine("Vous obtenez " + randomNumber.Next(1, 3) + " fragment(s) d'âme de Boss");
+            Console.WriteLine("Vous possédez désormais " + playerSoulFragment + " fragments d'âme de Boss.");
         }
-        
+        Console.WriteLine("----------------------------------------------------------------------");
+
     }
 }
